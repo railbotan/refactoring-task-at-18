@@ -7,29 +7,18 @@ def find_step(n):
 
 
 def find_av_brightness(i, j, arr, m_h, m_w, step):
-    br = 0
-    for h in range(i, i + m_h):
-        for w in range(j, j + m_w):
-            r = int(arr[h][w][0])
-            g = int(arr[h][w][1])
-            b = int(arr[h][w][2])
-            br += (r + g + b) / 3
+    br = 0.
+    br += arr[i: i + m_h, j: j + m_w, :].sum() / 3
     br //= m_h * m_w
     br -= br % step
-    return br
+    return np.uint8(br)
 
 
 def do_mosaic(arr, m_h, m_w, step):
-    height = len(arr)
-    width = len(arr[1])
-    for i in range(0, height, m_h):
-        for j in range(0, width, m_w):
+    for i in range(0, len(arr), m_h):
+        for j in range(0, len(arr[1]), m_w):
             brightness = find_av_brightness(i, j, arr, m_h, m_w, step)
-            for h in range(i, i + m_h):
-                for w in range(j, j + m_w):
-                    arr[h][w][0] = brightness
-                    arr[h][w][1] = brightness
-                    arr[h][w][2] = brightness
+            arr[i: i + m_h, j: j + m_w, :] = brightness
 
 
 inp_im = np.array(Image.open("img2.jpg"))
