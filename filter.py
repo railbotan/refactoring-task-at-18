@@ -11,24 +11,13 @@ def get_mosaic(image, size, gradation):
     while i < image_len:
         j = 0
         while j < image_h:
-            sum_c = get_sum(image_arr, size, i, j)
+            segment = image_arr[i: i + size, j: j + size]
+            sum_c = np.sum(segment)
             avg = int(sum_c // (size ** 2))
             set_color(int(avg // limit) * limit / 3, image_arr, size, i, j)
             j += size
         i += size
     return Image.fromarray(np.uint8(image_arr))
-
-
-def get_sum(array, size, i, j):
-    sum_c = 0
-    for x in range(i, i + size):
-        for y in range(j, j + size):
-            r = array[x][y][0]
-            g = array[x][y][1]
-            b = array[x][y][2]
-            M = r + g + b
-            sum_c += M
-    return sum_c
 
 
 def set_color(new_c, matrix, size, i, j):
