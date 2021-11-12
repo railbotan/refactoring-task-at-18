@@ -48,9 +48,9 @@ def main() -> None:
     parser.add_argument('-op', '--output_path', type=str, default=None,
                         help=('Путь до выходного изображения. Стандартное значение: '
                               '<путь до файла>_pixel.<расширение файла>.'))
-    parser.add_argument('-ps', '--pixel_size', type=int, default=10,
+    parser.add_argument('-ps', '--pixel_size', type=int, default=STANDARD_PIXEL_SIZE,
                         help=f'Устанавливает размер пикселя. Стандартное значение: {STANDARD_PIXEL_SIZE}.')
-    parser.add_argument('-gs', '--grayscale', type=int, default=50,
+    parser.add_argument('-gs', '--grayscale', type=int, default=STANDARD_GRAYSCALE,
                         help=f'Устанавливает градацию серого. Стандартное значение: {STANDARD_GRAYSCALE}.')
     args = parser.parse_args()
     convert(args.input_path, args.output_path, args.pixel_size, args.grayscale)
