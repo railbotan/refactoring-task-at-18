@@ -28,6 +28,9 @@ def create_gray_mosaic(img: np.ndarray, pixel_height: int, pixel_width: int, gra
     return res_img
 
 
-original_img = get_image_array("img2.jpg")
-mosaic = create_gray_mosaic(original_img, 10, 10, 50)
-save_image(mosaic, 'res.jpg')
+original_img = get_image_array(input("Enter original image file name: "))
+mosaic = create_gray_mosaic(original_img,
+                            int(input("Enter mosaic pixel height (Example: 10): ")),
+                            int(input("Enter mosaic pixel weight (Example: 10): ")),
+                            int(input("Enter gray step (Example: 50): ")))
+save_image(mosaic, input("Enter result mosaic file name: "))
