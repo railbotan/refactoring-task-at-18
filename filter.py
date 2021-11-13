@@ -25,9 +25,11 @@ def convert_gray_img(size_x, size_y, step):
     return pixels
 
 
-img = Image.open("img2.jpg")
+img = Image.open(input())
+res_file = input()
 pixels = np.array(img)
 res = Image.fromarray(convert_gray_img(10, 10, 50))
-res.save('res.jpg')
+res.save(res_file)
+
 
 
