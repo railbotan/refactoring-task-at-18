@@ -3,24 +3,13 @@ import numpy as np
 
 
 def count_gray(pixels_x, pixels_y, size_x, size_y):
-    gray = 0
-    for index_x in range(pixels_x, pixels_x + size_x):
-        for index_y in range(pixels_y, pixels_y + size_y):
-            color_1 = pixels[index_x][index_y][0]
-            color_2 = pixels[index_x][index_y][1]
-            color_3 = pixels[index_x][index_y][2]
-            gray += (int(color_1) + int(color_2) + int(color_3)) / 3
-    gray = int(gray // (size_x * size_y))
-    return gray
+    gray = np.sum((pixels[pixels_x: pixels_x + size_x, pixels_y: pixels_y + size_y]) / 3)
+    return int(gray // (size_x * size_y))
 
 
 def replace_pixels(pixels_x, size_x, pixels_y, size_y, step):
     gray = count_gray(pixels_x, pixels_y, size_x, size_y)
-    for index_x in range(pixels_x, pixels_x + size_x):
-        for index_y in range(pixels_y, pixels_y + size_y):
-            pixels[index_x][index_y][0] = int(gray // step) * step
-            pixels[index_x][index_y][1] = int(gray // step) * step
-            pixels[index_x][index_y][2] = int(gray // step) * step
+    pixels[pixels_x: pixels_x + size_x, pixels_y: pixels_y + size_y] = int(gray // step) * step
 
 
 def convert_gray_img(size_x, size_y, step):
