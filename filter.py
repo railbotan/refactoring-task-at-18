@@ -1,29 +1,46 @@
 import numpy as np
 from PIL import Image
 
-img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a:
-    j = 0
-    while j < a1:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                m1 = arr[n][n1][0]
-                m2 = arr[n][n1][1]
-                m3 = arr[n][n1][2]
-                M = m1 + m2 + m3
-                s += M // 3
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
-res.save('res.jpg')
+
+def get_image_array(path: str) -> np.ndarray:
+    img = Image.open(path)
+    return np.array(img)
+
+
+def save_image(img: np.ndarray, name: str) -> None:
+    res = Image.fromarray(img)
+    res.save(name)
+
+
+def get_brightness(x: int, y: int, img: np.ndarray, pixel_height: int, pixel_width: int, gray_step: int):
+    res = 0
+    for height in range(y, y + pixel_height):
+        for width in range(x, x + pixel_width):
+            channel_1 = int(img[height][width][0])
+            channel_2 = int(img[height][width][1])
+            channel_3 = int(img[height][width][2])
+            res += (channel_1 + channel_2 + channel_3) / 3
+    res = res // (pixel_height * pixel_width)
+    return res - res % gray_step
+
+
+def create_gray_mosaic(img: np.ndarray, pixel_height: int, pixel_width: int, gray_step: int) -> np.ndarray:
+    res_img = img.copy()
+    img_height = len(img)
+    img_width = len(img[1])
+
+    for y in range(0, img_height, pixel_height):
+        for x in range(0, img_width, pixel_width):
+            brightness = get_brightness(x, y, img, pixel_height, pixel_width, gray_step)
+            for height in range(y, y + pixel_height):
+                for width in range(x, x + pixel_width):
+                    res_img[height][width][0] = brightness
+                    res_img[height][width][1] = brightness
+                    res_img[height][width][2] = brightness
+
+    return res_img
+
+
+original_img = get_image_array("img2.jpg")
+mosaic = create_gray_mosaic(original_img, 10, 10, 50)
+save_image(mosaic, 'res.jpg')
