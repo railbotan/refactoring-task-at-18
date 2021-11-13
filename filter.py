@@ -1,29 +1,44 @@
 from PIL import Image
 import numpy as np
+
+
+def count_gray(pixels_x, pixels_y, size_x, size_y):
+    gray = 0
+    for index_x in range(pixels_x, pixels_x + size_x):
+        for index_y in range(pixels_y, pixels_y + size_y):
+            color_1 = pixels[index_x][index_y][0]
+            color_2 = pixels[index_x][index_y][1]
+            color_3 = pixels[index_x][index_y][2]
+            gray += (int(color_1) + int(color_2) + int(color_3)) / 3
+    gray = int(gray // (size_x * size_y))
+    return gray
+
+
+def replace_pixels(pixels_x, size_x, pixels_y, size_y, step):
+    gray = count_gray(pixels_x, pixels_y, size_x, size_y)
+    for index_x in range(pixels_x, pixels_x + size_x):
+        for index_y in range(pixels_y, pixels_y + size_y):
+            pixels[index_x][index_y][0] = int(gray // step) * step
+            pixels[index_x][index_y][1] = int(gray // step) * step
+            pixels[index_x][index_y][2] = int(gray // step) * step
+
+
+def convert_gray_img(size_x, size_y, step):
+    height = len(pixels)
+    width = len(pixels[1])
+    pixels_x = 0
+    while pixels_x < height:
+        pixels_y = 0
+        while pixels_y < width:
+            replace_pixels(pixels_x, size_x, pixels_y, size_y, step)
+            pixels_y = pixels_y + size_y
+        pixels_x = pixels_x + size_x
+    return pixels
+
+
 img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a:
-    j = 0
-    while j < a1:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                n11 = arr[n][n1][0]
-                n2 = arr[n][n1][1]
-                n3 = arr[n][n1][2]
-                M = (int(n1) + int(n2) + int(n3))/3
-                s += M
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
+pixels = np.array(img)
+res = Image.fromarray(convert_gray_img(10, 10, 50))
 res.save('res.jpg')
+
 
