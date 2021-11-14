@@ -24,8 +24,8 @@ def MakeColor(newMatrix, matrix, size, i, j):
 
 
 def CreateMosaicIMG(img, size, grad):
-    limit = 255 // grad
-    listImg = np.array(img).astype(int)
+    listImg = np.array(Image.open(img)).astype(int)
+    limit = 255 // grad    
     lenImg = len(listImg)
     height = len(listImg[0])
     i = 0
@@ -43,6 +43,6 @@ def CreateMosaicIMG(img, size, grad):
     return Image.fromarray(np.uint8(listImg))
 
 
-img = Image.open("img2.jpg")
-resolution = CreateMosaicIMG(img, size = 15, grad = 5)
-resolution.save('res.jpg')
+CreateMosaicIMG(input("Enter the name of the image file: "),
+            int(input("Enter the size of the mosaic: ")),
+            int(input("Enter the size of the gradation: "))).save('res.jpg')
