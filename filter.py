@@ -1,28 +1,38 @@
 from PIL import Image
 import numpy as np
 img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a - 11:
-    j = 0
-    while j < a1 - 11:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                newVar = arr[n][n1][0] // 3
-                n2 = arr[n][n1][1] // 3
-                n3 = arr[n][n1][2] // 3
-                M = int(newVar) + int(n2) + int(n3)
-                s += M
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 11
-    i = i + 11
-res = Image.fromarray(arr)
+imgArray = np.array(img)
+imgArrayLen = len(imgArray)
+innerArrayLen = len(imgArray[1])
+arrCounter = 0
+size = int(input('Введите размер мозаики: '))
+step = int(input('Введите количество градаций серого цвета: '))
+
+def CountTotalSum(innerArrCounter, arrCounter):
+    totalSum = 0
+    for ac in range(arrCounter, arrCounter + size):
+        for iac in range(innerArrCounter, innerArrCounter + size):
+            firstElem = imgArray[ac][iac][0] // 3
+            secondElem = imgArray[ac][iac][1] // 3
+            thirdElem = imgArray[ac][iac][2] // 3
+            elemSum = int(firstElem) + int(secondElem) + int(thirdElem)
+            totalSum += elemSum
+    return int(totalSum // 100)
+
+def CreatePixels(innerArrCounter, arrCounter, totalSum):
+    for ac in range(arrCounter, arrCounter + size):
+        for iac in range(innerArrCounter, innerArrCounter + size):
+            imgArray[ac][iac][0] = int(totalSum // step) * step
+            imgArray[ac][iac][1] = int(totalSum // step) * step
+            imgArray[ac][iac][2] = int(totalSum // step) * step
+
+while arrCounter < imgArrayLen - (size + 1):
+    innerArrCounter = 0
+    while innerArrCounter < innerArrayLen - (size + 1):
+        totalSum = CountTotalSum(innerArrCounter, arrCounter)
+        CreatePixels(innerArrCounter, arrCounter, totalSum)
+        innerArrCounter = innerArrCounter + size - 1
+    arrCounter = arrCounter + size - 1
+res = Image.fromarray(imgArray)
 res.save('res.jpg')
+
