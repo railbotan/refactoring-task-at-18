@@ -33,7 +33,8 @@ def CreateMosaicIMG(img, size, grad):
     while i < lenImg:
         j = 0
         while j < height:
-            sum = MosaicSum(listImg, size, i, j)
+            part = listImg[i: size + i, j: size + j]
+            sum = np.sum(part)
             avg = int(sum // (size ** 2))
             MakeColor(int(avg // limit) * limit / 3, listImg, size, i, j)
             j += size
