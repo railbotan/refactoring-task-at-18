@@ -18,7 +18,7 @@ def create_pixel_art(img, size, grayscale):
 
     for x in range(0, width, size):
         for y in range(0, height, size):
-            brightness = get_average_brightness(height, img, size, width, x, y)
+            brightness = get_average_brightness(img, size, x, y)
             for x1 in range(x, min(x + size, width)):
                 for y1 in range(y, min(y + size, height)):
                     img[x1][y1][0] = img[x1][y1][1] = img[x1][y1][2] = brightness - brightness % grayscale
@@ -26,7 +26,9 @@ def create_pixel_art(img, size, grayscale):
     return img
 
 
-def get_average_brightness(height, img, size, width, x, y):
+def get_average_brightness(img, size, x, y):
+    width = len(img)
+    height = len(img[1])
     brightness = 0
     for i in range(x, min(x + size, width)):
         for j in range(y, min(y + size, height)):
