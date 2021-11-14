@@ -1,7 +1,7 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
-
+img = Image.open(input())
+pixels = np.array(img)
 
 def get_gray(pix_width, pix_height, x, y):
     result = 0
@@ -36,6 +36,6 @@ def get_gray_img(x, y, step_gray):
         pix_width = pix_width + x
     return pixels
 
-pixels = np.array(img)
-res = Image.fromarray(get_gray_img(10, 10, 50))
+mozaik = input(('Enter width, height, gray step')).split()
+res = Image.fromarray(get_gray_img(int(mozaik[0]), int(mozaik[1]), int(mozaik[2])))
 res.save('res.jpg')
