@@ -2,20 +2,6 @@ from PIL import Image
 import numpy as np
 
 
-def MosaicSum(array, size, i, j):
-    sum = 0
-    
-    for x in range(i, i + size):
-        for y in range(j, j + size):
-            redGrad = array[x][y][0]
-            greenGrad = array[x][y][1]
-            blueGrad = array[x][y][2]
-            M = redGrad + greenGrad + blueGrad
-            sum += M
-    
-    return sum
-
-
 def MakeColor(newMatrix, matrix, size, i, j):
     for x in range(i, i + size):
         for y in range(j, j + size):
