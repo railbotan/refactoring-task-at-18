@@ -7,8 +7,8 @@ def Create_color (img_list, i, j, gray_sum, area, step):
             for z in range (3):
                 img_list[x][y][z] = int(gray_sum // step) * step
 
-def Create_IMG (area, step):
-    img_list = np.array(Image.open("img2.jpg"))
+def Create_IMG(img, out, area, step):
+    img_list = np.array(Image.open(img))
     pixels_count = len(img_list)
     width = len(img_list[1])
     i = 0
@@ -20,6 +20,6 @@ def Create_IMG (area, step):
             Create_color(img_list, i, j, gray_sum, area, step)
             j += 10
         i += 10
-    Image.fromarray(img_list).save('res.jpg')
+    Image.fromarray(img_list).save(out)
 
-Create_IMG (10, 6)
+Create_IMG(input("name:"), input("out_name:"), int(input("area:")), int(input("step:")))
