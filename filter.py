@@ -18,21 +18,13 @@ def get_pixel_art(img, size, grayscale):
 
     for x in range(0, width, size):
         for y in range(0, height, size):
-            brightness = get_brightness(height, img, size, width, x, y)
-            for i in range(x, min(x + size, width)):
-                for j in range(y, min(y + size, height)):
-                    img[i][j][0] = img[i][j][1] = img[i][j][2] = brightness - brightness % grayscale
-
+            brightness = get_brightness(img, size, x, y)
+            img[x: x + size, y: y + size] = brightness - brightness % grayscale
     return img
 
 
-def get_brightness(height, img, size, width, x, y):
-    brightness = 0
-    for i in range(x, min(x + size, width)):
-        for j in range(y, min(y + size, height)):
-            brightness += sum(int(color) for color in img[i][j]) // 3
-    brightness = brightness // (size * size)
-    return brightness
+def get_brightness(img, size, x, y):
+    return np.average(img[x: x + size, y: y + size])
 
 
 img = get_img("img2.jpg")
