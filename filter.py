@@ -1,6 +1,8 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
+imgName = input('Введите название исходного изображения (с расширением): ')
+resName = input('Введите название конечного изображения (с расширением): ')
+img = Image.open(imgName)
 imgArray = np.array(img)
 imgArrayLen = len(imgArray)
 innerArrayLen = len(imgArray[1])
@@ -29,5 +31,5 @@ while arrCounter < imgArrayLen - (size + 1):
         innerArrCounter = innerArrCounter + size - 1
     arrCounter = arrCounter + size - 1
 res = Image.fromarray(imgArray)
-res.save('res.jpg')
-
+res.save(resName)
+print('Преобразование завершено!')
