@@ -10,21 +10,16 @@ step = int(input('Введите количество градаций серо�
 
 def CountTotalSum(innerArrCounter, arrCounter):
     totalSum = 0
+    tempArr = imgArray // 3
     for ac in range(arrCounter, arrCounter + size):
         for iac in range(innerArrCounter, innerArrCounter + size):
-            firstElem = imgArray[ac][iac][0] // 3
-            secondElem = imgArray[ac][iac][1] // 3
-            thirdElem = imgArray[ac][iac][2] // 3
-            elemSum = int(firstElem) + int(secondElem) + int(thirdElem)
-            totalSum += elemSum
+            totalSum += sum(tempArr[ac][iac])
     return int(totalSum // 100)
 
 def CreatePixels(innerArrCounter, arrCounter, totalSum):
     for ac in range(arrCounter, arrCounter + size):
         for iac in range(innerArrCounter, innerArrCounter + size):
-            imgArray[ac][iac][0] = int(totalSum // step) * step
-            imgArray[ac][iac][1] = int(totalSum // step) * step
-            imgArray[ac][iac][2] = int(totalSum // step) * step
+            imgArray[ac][iac][:] = int(totalSum // step) * step
 
 while arrCounter < imgArrayLen - (size + 1):
     innerArrCounter = 0
