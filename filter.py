@@ -1,28 +1,34 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a - 11:
-    j = 0
-    while j < a1 - 11:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                n1 = arr[n][n1][0]
-                n2 = arr[n][n1][1]
-                n3 = arr[n][n1][2]
-                M = n1 + n2 + n3
-                s += M
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
-res.save('res.jpg')
+
+
+def MakeColor(newMatrix, matrix, size, i, j):
+    for x in range(i, i + size):
+        for y in range(j, j + size):
+            for z in range(3):
+                matrix[x][y][z] = newMatrix
+
+
+def CreateMosaicIMG(img, size, grad):
+    listImg = np.array(Image.open(img)).astype(int)
+    limit = 255 // grad    
+    lenImg = len(listImg)
+    height = len(listImg[0])
+    i = 0
+    
+    while i < lenImg:
+        j = 0
+        while j < height:
+            part = listImg[i: size + i, j: size + j]
+            sum = np.sum(part)
+            avg = int(sum // (size ** 2))
+            MakeColor(int(avg // limit) * limit / 3, listImg, size, i, j)
+            j += size
+        i += size
+    
+    return Image.fromarray(np.uint8(listImg))
+
+
+CreateMosaicIMG(input("Enter the name of the image file: "),
+            int(input("Enter the size of the mosaic: ")),
+            int(input("Enter the size of the gradation: "))).save('res.jpg')
