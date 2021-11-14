@@ -3,38 +3,23 @@ from PIL import Image
 
 
 def img_to_nparr(path):
-    img = Image.open(path)
-    return np.array(img)
+    return np.array(Image.open(path))
 
 
 def save_img_from_nparr(img, name):
-    res = Image.fromarray(img)
-    res.save(name)
+    Image.fromarray(img).save(name)
 
 
 def create_pixel_art(img, size, grayscale):
-    width = len(img)
-    height = len(img[1])
-
-    for x in range(0, width, size):
-        for y in range(0, height, size):
+    for x in range(0, len(img), size):
+        for y in range(0, len(img[1]), size):
             brightness = get_average_brightness(img, size, x, y)
-            for x1 in range(x, min(x + size, width)):
-                for y1 in range(y, min(y + size, height)):
-                    img[x1][y1][0] = img[x1][y1][1] = img[x1][y1][2] = brightness - brightness % grayscale
-
+            img[x: x + size, y: y + size] = brightness - brightness % grayscale
     return img
 
 
 def get_average_brightness(img, size, x, y):
-    width = len(img)
-    height = len(img[1])
-    brightness = 0
-    for i in range(x, min(x + size, width)):
-        for j in range(y, min(y + size, height)):
-            brightness += sum(int(color) for color in img[i][j]) // 3
-    brightness = brightness // (size * size)
-    return brightness
+    return np.average(img[x: x + size, y: y + size])
 
 
 img = img_to_nparr("img2.jpg")
