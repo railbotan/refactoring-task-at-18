@@ -1,28 +1,41 @@
 from PIL import Image
 import numpy as np
 img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a:
-    j = 0
-    while j < a1:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                m1 = arr[n][n1][0]
-                m2 = arr[n][n1][1]
-                m3 = arr[n][n1][2]
-                M = m1 + m2 + m3
-                s += M // 3
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
+
+
+def get_gray(pix_width, pix_height, x, y):
+    result = 0
+    for width in range(pix_width, pix_width + x):
+        for height in range(pix_height, pix_height + y):
+            color_1 = int(pixels[width][height][0])
+            color_2 = int(pixels[width][height][1])
+            color_3 = int(pixels[width][height][2])
+            result += (color_1 + color_2 + color_3) / 3
+    result = int(result // (x * y))
+    return result
+
+
+def replace_pixels(pix_width, x, pix_height, y, step_gray):
+    gray = get_gray(pix_width, pix_height, x, y)
+    for width in range(pix_width, pix_width + x):
+        for height in range(pix_height, pix_height + y):
+            pixels[width][height][0] = int(gray // step_gray) * step_gray
+            pixels[width][height][1] = int(gray // step_gray) * step_gray
+            pixels[width][height][2] = int(gray // step_gray) * step_gray
+
+
+def get_gray_img(x, y, step_gray):
+    height = len(pixels)
+    width = len(pixels[1])
+    pix_width = 0
+    while pix_width < height:
+        pix_height = 0
+        while pixels_y < width:
+            replace_pixels(pix_width, x, pix_height, y, step_gray)
+            pixels_y = pix_height + y
+        pix_width = pix_width + x
+    return pixels
+
+pixels = np.array(img)
+res = Image.fromarray(get_gray_img(10, 10, 50))
 res.save('res.jpg')
