@@ -1,28 +1,32 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a - 11:
-    j = 0
-    while j < a1 - 11:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                n1 = arr[n][n1][0]
-                n2 = arr[n][n1][1]
-                n3 = arr[n][n1][2]
-                M = n1 + n2 + n3
-                s += M
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
-res.save('res.jpg')
+img = Image.open(input())
+pixels = np.array(img)
+
+def get_gray(pix_width, pix_height, x, y):
+    result = np.sum(pixels[pix_width: pix_width + x,pix_height: pix_height + y ]) / 3
+    result = int(result // (x * y))
+    return result
+
+
+def replace_pixels(pix_width, x, pix_height, y, step_gray):
+    gray = get_gray(pix_width, pix_height, x, y)
+    pixels[pix_width: pix_width + x,pix_height: pix_height + y ] = int(gray // step_gray) * step_gray
+
+
+def get_gray_img(x, y, step_gray):
+    height = len(pixels)
+    width = len(pixels[1])
+    pix_width = 0
+    while pix_width < height:
+        pix_height = 0
+        while pix_height < width:
+            replace_pixels(pix_width, x, pix_height, y, step_gray)
+            pixels_y = pix_height + y
+        pix_width = pix_width + x
+    return pixels
+
+mozaik = input(('Enter width, height, gray step')).split()
+name = input(('Enter name of the result file')) + '.jpg'
+
+Image.fromarray(get_gray_img(int(mozaik[0]), int(mozaik[1]), int(mozaik[2]))).save(name)
