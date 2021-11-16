@@ -30,12 +30,13 @@ def get_gray_img(x, y, step_gray):
     pix_width = 0
     while pix_width < height:
         pix_height = 0
-        while pixels_y < width:
+        while pix_height < width:
             replace_pixels(pix_width, x, pix_height, y, step_gray)
             pixels_y = pix_height + y
         pix_width = pix_width + x
     return pixels
 
 mozaik = input(('Enter width, height, gray step')).split()
-res = Image.fromarray(get_gray_img(int(mozaik[0]), int(mozaik[1]), int(mozaik[2])))
-res.save('res.jpg')
+name = input(('Enter name of the result file')) + '.jpg'
+
+Image.fromarray(get_gray_img(int(mozaik[0]), int(mozaik[1]), int(mozaik[2]))).save(name)
