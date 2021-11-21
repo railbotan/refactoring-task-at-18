@@ -20,6 +20,10 @@ def grey_img(file_image, gradation, size_moz):
              set_color(arr_pixels, brightness, size_moz, pix_x, pix_y, step)
     return arr_pixels
 
-img = Image.open("img2.jpg")
-res = Image.fromarray(grey_img(img, 10, 50))
-res.save('res.jpg')
+file_image = input("Введите имя входного файла")
+size_moz = input("Введите размер желаемой мозайки")
+gradation = int(input("Введите количество градаций(число)"))
+res_image = input("Введите имя файла для сохранения")
+img = Image.open(file_image)
+res = Image.fromarray(grey_img(file_image, gradation, size_moz))
+res.save(res_image)
