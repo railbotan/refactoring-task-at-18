@@ -1,30 +1,36 @@
 from PIL import Image
 import numpy as np
 
-img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
-i = 0
-while i < a:
-    j = 0
-    while j < a1:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                n_1 = arr[n][n1][0]
-                n2 = arr[n][n1][1]
-                n3 = arr[n][n1][2]
-                M = int(n_1) + int(n2) + int(n3)
-                s += M // 3
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
+def get_brightness(arr_pixels, pix_x, pix_y, size_moz):
+    result_grey = 0
+    for row in range(pix_x, pix_x + size_moz):
+            for column in range(pix_y, pix_y + size_moz):
+                first_color = arr_pix[row][column][0]
+                second_color = arr_pix[row][column][1]
+                third_color = arr_pix[row][column][2]
+                sum_color = int(first_color) + int(second_color) + int(third_color)
+                result_grey += int(sum_color // 3 // size_moz ** 2)
+    return result_grey
 
-res = Image.fromarray(arr)
+def set_color(arr_pixels, brightness, size_moz, pix_x, pix_y, step):
+    value_grey = int(brightness // step) * step
+    for row in range(pix_x, pix_x + size_moz):
+            for column in range(pix_y, pix_y + size_moz):
+                arr_pixels[row][column][0] = value_grey
+                arr_pixels[row][column][1] = value_grey
+                arr_pixels[row][column][2] = value_grey
+
+def grey_img(file_image, gradation, size_moz):
+    arr_pixels = np.array(img)
+    height = len(arr_pixels)
+    width = len(arr_pixels[1])
+    step = 255 // graduation
+    for y in range(0, height, size_moz):
+        for x in range(0, width, size_moz):
+             brightness = get_brightness(arr_pixels, pix_x, pix_y, size_moz)
+             set_color(arr_pixels, brightness, size_moz, pix_x, pix_y, step)
+    return arr_pixels
+
+img = Image.open("img2.jpg")
+res = Image.fromarray(grey_img(img, 10, 50))
 res.save('res.jpg')
