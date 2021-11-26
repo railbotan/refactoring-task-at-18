@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
+img = Image.open(input("Введите название входного файла"))
 
 def get_illumination(pixels, p_x, p_y, size):
     summa = np.sum(pixels[p_x: p_x + size, p_y: p_y + size])
@@ -21,5 +21,7 @@ def get_gray(file_image, gradation, size):
             install_color(pixels, illumination, size, p_x, p_y, step)
     return pixels
 
-res = Image.fromarray(grey_img(img, 10, 50))
-res.save('res.jpg')
+res = Image.fromarray(grey_img(input("Введите название входного файла"), 
+                               int(input("Введите размер градации")), 
+                               int(input("Введите размер мозаики"))))
+res.save(input("Введите название для сохроняемого файла"))
