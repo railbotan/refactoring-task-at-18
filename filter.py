@@ -1,28 +1,17 @@
 from PIL import Image
 import numpy as np
-img = Image.open("img2.jpg")
+
 def get_illumination(pixels, p_x, p_y, size):
-     result = 0
-     for row in range(p_x, p_x + size):
-         for column in range(p_y, p_y + size):
-             color_1 = int(pix[row][column][0])
-             color_2 = int(pix[row][column][1])
-             color_3 = int(pix[row][column][2])
-             summa = color_1 + color_2 + color_3
-             result += int(summa // 3)
-     result = int(result // (size * size))
-     return result
+    summa = np.sum(pixels[p_x: p_x + size, p_y: p_y + size])
+    result = int(summa // 3)
+    return int(result // (size * size))
 
 def install_color(pixels, illumination, size, p_x, p_y, step):
-    for row in range(p_x, p_x + size):
-        for column in range(p_y, p_y + size):
-            pixels[row][column][0] = int(illumination // step) * step
-            pixels[row][column][1] = int(illumination // step) * step
-            pixels[row][column][2] = int(illumination // step) * step
+    pixels[p_x: p_x + size, p_y: p_y + size] = int(illumination // step) * step
 
-def get_gray(file_image, gradation, size):
+def get_gray(img, gradation, size):
+    pixels = np.array(Image.open(img)).astype(int)
     step = 255 // graduation
-    pixels = np.array(img)
     hei = len(pixels)
     wid = len(pixels[1])
     for y in range(0, hei, size):
@@ -31,5 +20,7 @@ def get_gray(file_image, gradation, size):
             install_color(pixels, illumination, size, x, y, step)
     return pixels
 
-res = Image.fromarray(grey_img(img, 10, 50))
+res = Image.fromarray(get_gray(input("Введите название входного файла"),
+                                int(input("Введите размер градации")), 
+                                int(input("Введите размер мозаики"))))
 res.save('res.jpg')
