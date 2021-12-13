@@ -1,28 +1,30 @@
 from PIL import Image
 import numpy as np
+
+def get_grey(s0, i, j):
+    size[i: i + mosaic_size, j: j + mosaic_size, 0] = int(s0 // grayscale) * grayscale
+    size[i: i + mosaic_size, j: j + mosaic_size, 1] = int(s0 // grayscale) * grayscale
+    size[i: i + mosaic_size, j: j + mosaic_size, 2] = int(s0 // grayscale) * grayscale
+def get_px(i, j):
+    return np.sum(size[i: i + mosaic_size, j: j + mosaic_size]) // 3
+
+grayscale = int(input())
+mosaic_size = int(input())
+
 img = Image.open("img2.jpg")
-arr = np.array(img)
-a = len(arr)
-a1 = len(arr[1])
+
+size = np.array(img)
+height = len(size)
+width = len(size[1])
+
 i = 0
-while i < a - 11:
+
+while i < height:
     j = 0
-    while j < a1 - 11:
-        s = 0
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                n1 = arr[n][n1][0]
-                n2 = arr[n][n1][1]
-                n3 = arr[n][n1][2]
-                M = n1 + n2 + n3
-                s += M
-        s = int(s // 100)
-        for n in range(i, i + 10):
-            for n1 in range(j, j + 10):
-                arr[n][n1][0] = int(s // 50) * 50
-                arr[n][n1][1] = int(s // 50) * 50
-                arr[n][n1][2] = int(s // 50) * 50
-        j = j + 10
-    i = i + 10
-res = Image.fromarray(arr)
+    while j < width:
+        s = int(get_px(i, j) // (mosaic_size * mosaic_size))
+        get_grey(s, i, j)
+        j = j + mosaic_size
+    i = i + mosaic_size
+res = Image.fromarray(size)
 res.save('res.jpg')
